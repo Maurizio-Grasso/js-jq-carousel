@@ -2,6 +2,7 @@ $(document).ready( function() {
 mainFunction();
 });
 
+
 function mainFunction() {
     $('.prev').click( function() { SliderPrevImage(this); });
     $('.next').click( function() { SliderNextImage(this); });
