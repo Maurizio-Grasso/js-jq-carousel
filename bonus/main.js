@@ -2,36 +2,97 @@ $(document).ready( function() {
     mainFunction();    
 });
 
-function mainFunction() {
+const   sliderClassName = 'single-slider-root'; // Nome della classe assegnata agli slider
+var     allSliders; // La variabile che conterrà tutti gli slider presenti nella pagina deve essere globale
 
-    var sliderClassName = document.getElementsByClassName('slider-wrapper');    // Nome della classe assegnata agli slider
-    var slidersCount = contaSlider(sliderClassName);    // Numero di slider trovati
+function mainFunction() {
+        
+    allSliders = document.getElementsByClassName(sliderClassName);  // Tutti gli slider presenti nella pagina    
+
+    var slidersCount = contaSlider(allSliders);    // Numero di slider trovati
     
     if (slidersCount > 0) { //  Se nella pagina sono presenti slider
         
         for (var i = 0; i < slidersCount; i++ ) 
-            popolateSliderNav(sliderClassName[i]);  // Popola il nav di ogni slider
-            
-        $('.prev').click( function() { SliderPrevImage(this); });   // Assegna evento a freccia sinistra
-        $('.next').click( function() { SliderNextImage(this); });   // Assegna evento a freccia destra
+            popolateSliderNav(allSliders[i]);  // Popola il nav di ogni slider
+ 
+            $('.prev').click( function() { cambiaImmagine(this,-1); });   // Assegna evento a freccia sinistra
+            $('.next').click( function() { cambiaImmagine(this,1); });   // Assegna evento a freccia destra
     
         $(document).keydown(function(keyPressed) {
             if (keyPressed.keyCode == 37)   // Se viene premuto tasto sinistro da tastiera
-                SliderPrevImage("byKeyboard");
+                cambiaImmagine("byKeyboard",-1);
             else if (keyPressed.keyCode == 39)  // Se viene premuto tasto destro da tastiera
-                SliderNextImage("byKeyboard");
+                cambiaImmagine("byKeyboard",1);
         }
         );
     }
 }
 
-function popolateSliderNav(SingleSlider) {
+function cambiaImmagine(callingElement , offset) {
+//  Passati come parametri un elemento chiamante (callingElement) ed un offset questa funzione cambia la slide visualizzata
+//  'callingElement' è un elemento del DOM o la stringa "byKeyboard" se l'input è dato da tasiera
+//  'offset' può essere uguale a: -1 (slide precendente), 1 (slide successiva), 0 (la slide da visualizzare si deduce da 'callingElement')
 
-    $(SingleSlider).find('.nav').html("");  //Resetta inner html prima di cominciare
+    if (callingElement == "byKeyboard" ){
+        // Se l'input è dato da tastiera non ho altra scelta che scorrere le slide su *tutti* gli slider presenti in pagina
+        // Richiamo quindi ricorsivamente la funzione stessa passando come callingElement uno slider alla volta
+        for (let i = 0; i< contaSlider(allSliders); i++)
+             cambiaImmagine(allSliders[i],offset);
+    }
+       // Se invece l'input non è dato da tastiera, determino da quale Slider proviene la chiamata
+    else
+        var currentSlider = $(callingElement).closest("."+sliderClassName);
+    
+    var activeElement = $(currentSlider).find('.active');   //  Assegna ad una variabile gli elementi attivi (Immagine e pallino)
+    activeElement.removeClass('active');    // E rimuove da essi la classe active
+    
+    switch (offset) {
+        case 0:
+        // Ha chiamato il pallino del nav
+            var callingElementIndex = $($(callingElement).parent()).find( "i" ).index( callingElement );    // Ottiene l'indice del pallino blu che ha chiamato (che corrisponderà alla foto da visualizzare)
+            $(callingElement).addClass('active');   // Assegna classe active al pallino che ha chiamato
+            $($(currentSlider).find('.images').find('img').get(callingElementIndex)).addClass('active');    // assegna classe active all'img corrisponente al pallino che ha chiamato
+            break;
+
+        case 1:
+        // avanza di 1 (ha chiamato tastiera o 'next arrow')
+            if (activeElement.hasClass('last')) // Se siamo sull'ultima immagine
+                $(currentSlider).find('.first').addClass('active');
+            else
+                activeElement.next().addClass('active');
+            break;
+
+        case -1:
+        // disavanza di 1 (ha chiamato tastiera o 'prev arrow')
+            if (activeElement.hasClass('first'))    // Se siamo sulla prima immagine
+               $(currentSlider).find('.last').addClass('active');
+            else
+                activeElement.prev().addClass('active');    
+            break;                
+        }
+}
+
+function contaSlider(allSliders) {
+    //  Restituisce il numero di slider presenti nella pagina
+
+    return allSliders.length;
+}
+
+function contaImmagini(SingleSlider) {    
+    //  Passato uno specifico slider come parametro, la funzione conta il numero di immagini al suo interno
+
+    return $(SingleSlider).find('.images').find('img').length;
+}
+
+function popolateSliderNav(SingleSlider) {
+    //  Questa funzione popola il nav dello slider con tanti pallini quante sono le immagini presenti nello slider stesso
+    
+    $(SingleSlider).find('.nav').html("");  //Per sicurezza resetta inner html prima di cominciare
     
     var imgCount = contaImmagini(SingleSlider);
 
-    if (imgCount > 1 ) {    // Se c'è più di una immagine (altrimenti il nav è inutile)
+    if (imgCount > 1 ) {    // Proseguo solo se c'è più di una immagine (altrimenti il nav è inutile)
 
         for (let i = 0; i < imgCount; i++ )
             $(SingleSlider).find('.nav').append('<i class="fas fa-circle"></i>');
@@ -42,76 +103,8 @@ function popolateSliderNav(SingleSlider) {
         for (let i = 0; i < imgCount; i++ ) {
             //  Questo blocco assegnerà un evento ad ogni pallino
             $($(SingleSlider).find('.nav').find('i').get(i)).click( function() {
-                // alert("Ciao, sono l'elemento "+i);
-                sliderChangeImg(this);
+                cambiaImmagine(this,0);
             })   
         }
     }
-}
-
-function sliderChangeImg(callingElement) {
-    // Cambia l'immagine attiva quando si clicca su un pallino
-    var currentSlider = $(callingElement).parent().parent();
-    var callingElementIndex = $($(callingElement).parent()).find( "i" ).index( callingElement ) ;
-    
-    
-
-    var activeElement = $(currentSlider).find('.active');   //Immagine e pallino Attivi
-    activeElement.removeClass('active');
-
-    $(callingElement).addClass('active');
-    $($(currentSlider).find('.images').find('img').get(callingElementIndex)).addClass('active');
-
-}
-
-function contaSlider(sliderClassName) {
-    // Restituisce il numero di slider presenti nella pagina
-    return sliderClassName.length;
-}
-
-function contaImmagini(SingleSlider) {    
-    //    Fornito uno slider specifico come parametro conta il numero di immagini al suo interno
-    return $(SingleSlider).find('.images').find('img').length;
-}
-
-function SliderPrevImage(callingElement) {
-
-    // Nella pagina potrebbero essere presenti diversi slider.
-    // Passo quindi come parametro alla funzione lo specifico elemendo del DOM
-    // Sul quale l'utente ha fatto click
-
-    // Se la funzione è stata richiamata tramite tastiera
-    // L'immagine (pazienza...) cambierà su tutti gli slider presenti sulla pagina
-
-    if (callingElement == "byKeyboard" )
-        var currentSlider = $('.slider-wrapper');   // Attiva tutti gli slider
-    else
-        var currentSlider = $(callingElement).parent();   // Attiva Slider Specifico
-
-    var activeElement = $(currentSlider).find('.active');   //Immagine Attiva
-
-    activeElement.removeClass('active');
-
-    if (activeElement.hasClass('first'))
-        $(currentSlider).find('.last').addClass('active');
-    else
-        activeElement.prev().addClass('active');    
-}
-
-function SliderNextImage(callingElement) {
-
-    if (callingElement == "byKeyboard" )
-        var currentSlider = $('.slider-wrapper');   // Attiva tutti gli slider
-    else
-        var currentSlider = $(callingElement).parent();   // Attiva Slider Specifico
-
-    var activeElement = $(currentSlider).find('.active');       //Immagine Attiva
-
-    activeElement.removeClass('active');
-
-    if (activeElement.hasClass('last'))
-        $(currentSlider).find('.first').addClass('active');
-    else
-        activeElement.next().addClass('active');
-
 }

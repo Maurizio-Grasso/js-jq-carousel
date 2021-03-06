@@ -2,61 +2,112 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
+        <!-- Google Font "Lato" -->
         <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+        <!-- Font Awesome -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+        <!-- My Style -->
         <link rel="stylesheet" href="style.css">
+        <!-- jQuery -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <title>Slider</title>
+        <title>My Slider Portfolio</title>
     </head>
     <body>
         <div class="container">
-            <div class="slider-wrapper">
-                <div class="prev">
-                    <i class="fas fa-angle-left"></i>
-                </div>
-                <div class="images">
-                    <img class="active first" src="https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?cs=srgb&dl=clouds-country-daylight-371633.jpg&fm=jpg" alt="">
-                    <img src="https://static.photocdn.pt/images/articles/2017/04/28/iStock-646511634.jpg" alt="">
-                    <img src="https://cdn.mos.cms.futurecdn.net/FUE7XiFApEqWZQ85wYcAfM.jpg" alt="">
-                    <img class="last" src="https://static.photocdn.pt/images/articles/2017/04/28/iStock-546424192.jpg" alt="">
-                </div>
-                <div class="next">
-                    <i class="fas fa-angle-right"></i>
-                </div>
-                <div class="nav">
-                    <i class="fas fa-circle active first"></i>
-                    <i class="fas fa-circle"></i>
-                    <i class="fas fa-circle"></i>
-                    <i class="fas fa-circle last"></i>
-                </div>
-            </div>
-        </div>
+            <main>
+                <section class="section-standard">
 
-   <!-- Secondo Slider (solo per vedere se tutto funziona) -->
+                    <div class="single-slider-root">
 
-        <div class="container">
-            <div class="slider-wrapper">
-                <div class="prev">
-                    <i class="fas fa-angle-left"></i>
-                </div>
-                <div class="images">
-                    <img class="active first" src="https://images.pexels.com/photos/371633/pexels-photo-371633.jpeg?cs=srgb&dl=clouds-country-daylight-371633.jpg&fm=jpg" alt="">
-                    <img src="https://static.photocdn.pt/images/articles/2017/04/28/iStock-646511634.jpg" alt="">
-                    <img src="https://cdn.mos.cms.futurecdn.net/FUE7XiFApEqWZQ85wYcAfM.jpg" alt="">
-                    <img src="https://cdn.mos.cms.futurecdn.net/FUE7XiFApEqWZQ85wYcAfM.jpg" alt="">
-                    <img class="last" src="https://static.photocdn.pt/images/articles/2017/04/28/iStock-546424192.jpg" alt="">
-                </div>
-                <div class="next">
-                    <i class="fas fa-angle-right"></i>
-                </div>
-                <div class="nav">
-                    <i class="fas fa-circle active first"></i>
-                    <i class="fas fa-circle"></i>
-                    <i class="fas fa-circle"></i>
-                    <i class="fas fa-circle last"></i>
-                </div>
-            </div>
-        </div>
+                        <div class="outer-heading">
+                            <h2>My Sicily</h2>
+                        </div>
+
+                        <div class="inner-slider">
+
+                            <div class="prev">
+                                <i class="fas fa-angle-left"></i>
+                            </div>
+                            <div class="images">
+                                <img class="active first" src="img/sic-1.jpg" alt="">
+                                <img src="img/sic-2.jpg" alt="">
+                                <img src="img/sic-3.jpg" alt="">
+                                <img src="img/sic-4.jpg" alt="">
+                                <img src="img/sic-5.jpg" alt="">
+                                <img class="last" src="img/sic-6.jpg" alt="">
+                            </div>
+                            <div class="next">
+                                <i class="fas fa-angle-right"></i>
+                            </div>
+                        </div>
+                        <div class="outer-nav">
+                            <div class="nav"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-standard">
+
+                    <div class="single-slider-root">
+
+                        <div class="outer-heading">
+                            <h2>My Tuscany</h2>
+                        </div>
+
+                        <div class="inner-slider">
+
+                            <div class="prev">
+                                <i class="fas fa-angle-left"></i>
+                            </div>
+                            <div class="images">
+                                <img class="active first" src="img/tusc-1.jpg" alt="">
+                                <img src="img/tusc-2.jpg" alt="">
+                                <img src="img/tusc-3.jpg" alt="">
+                                <img src="img/tusc-4.jpg" alt="">
+                                <img class="last" src="img/tusc-5.jpg" alt="">
+                            </div>
+                            <div class="next">
+                                <i class="fas fa-angle-right"></i>
+                            </div>
+                        </div>
+                        <div class="outer-nav">
+                            <div class="nav"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section-standard">
+
+                    <div class="single-slider-root">
+
+                        <div class="outer-heading">
+                            <h2>My Scotland</h2>
+                        </div>
+
+                        <div class="inner-slider">
+
+                            <div class="prev">
+                                <i class="fas fa-angle-left"></i>
+                            </div>
+                            <div class="images">
+                                <img class="active first" src="img/scot-1.jpg" alt="">
+                                <img src="img/scot-2.jpg" alt="">
+                                <img src="img/scot-3.jpg" alt="">
+                                <img class="last" src="img/scot-4.jpg" alt="">
+                            </div>
+                            <div class="next">
+                                <i class="fas fa-angle-right"></i>
+                            </div>
+                        </div>
+                        <div class="outer-nav">
+                            <div class="nav"></div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+        </div>  <!-- Container -->
 
         <script src="main.js"></script>
     </body>
