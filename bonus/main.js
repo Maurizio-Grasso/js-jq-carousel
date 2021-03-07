@@ -5,19 +5,54 @@ $(document).ready( function() {
 const   sliderClassName = 'single-slider-root'; // Nome della classe assegnata agli slider
 var     allSliders; // La variabile che conterrà tutti gli slider presenti nella pagina deve essere globale
 
-function mainFunction() {
-        
-    allSliders = document.getElementsByClassName(sliderClassName);  // Tutti gli slider presenti nella pagina    
 
+
+
+function popolateHeaderMenu(slider) {
+//  Questa funzione inserisce un link al menu per ogni slider presente nella pagina
+
+    var sliderName = getSliderName(slider);
+    var sliderId =  setSliderId(slider,sliderName);
+    
+    setSliderId(slider,sliderName);    // Assegna id univoco allo slider
+    
+    $(document).find('.inner-menu').find('ul').append('<li> <a href="#'+sliderId+'">'+sliderName+'</a></li>');
+}
+
+function getSliderName(slider) {
+    //  Questa funzione Determina il nome da assegnare ad ogni slider in base al titolo H2 che lo precede    
+    return $(slider).closest('.single-slider-root').find('.slider-heading').text();
+}
+
+function setSliderId(slider,sliderName) {
+    //  Questa funzione assegna un id ad ogni slider    
+    var sliderId = sliderName.toLowerCase().replace(/ /g,'-') + '-slider';
+    $(slider).attr('id',sliderId);
+    return sliderId;
+}
+
+
+function mainFunction() {
+    
+    
+    allSliders = document.getElementsByClassName(sliderClassName);  // Tutti gli slider presenti nella pagina    
+    
     var slidersCount = contaSlider(allSliders);    // Numero di slider trovati
     
     if (slidersCount > 0) { //  Se nella pagina sono presenti slider
         
-        for (var i = 0; i < slidersCount; i++ ) 
-            popolateSliderNav(allSliders[i]);  // Popola il nav di ogni slider
- 
-            $('.prev').click( function() { cambiaImmagine(this,-1); });   // Assegna evento a freccia sinistra
-            $('.next').click( function() { cambiaImmagine(this,1); });   // Assegna evento a freccia destra
+        $(document).find('.hamburger-icon').click(function() {showMenu()});
+        $(document).find('.close-window-icon').click(function() {hideMenu()});
+        
+        for (var i = 0; i < slidersCount; i++ ) {
+
+        popolateHeaderMenu(allSliders[i]);
+
+        popolateSliderNav(allSliders[i]);  // Popola il nav di ogni slider
+        }
+        
+        $('.prev').click( function() { cambiaImmagine(this,-1); });   // Assegna evento a freccia sinistra
+        $('.next').click( function() { cambiaImmagine(this,1); });   // Assegna evento a freccia destra
     
         $(document).keydown(function(keyPressed) {
             if (keyPressed.keyCode == 37)   // Se viene premuto tasto sinistro da tastiera
@@ -28,6 +63,7 @@ function mainFunction() {
         );
     }
 }
+
 
 function cambiaImmagine(callingElement , offset) {
 //  Passati come parametri un elemento chiamante (callingElement) ed un offset questa funzione cambia la slide visualizzata
@@ -73,17 +109,7 @@ function cambiaImmagine(callingElement , offset) {
         }
 }
 
-function contaSlider(allSliders) {
-    //  Restituisce il numero di slider presenti nella pagina
 
-    return allSliders.length;
-}
-
-function contaImmagini(SingleSlider) {    
-    //  Passato uno specifico slider come parametro, la funzione conta il numero di immagini al suo interno
-
-    return $(SingleSlider).find('.images').find('img').length;
-}
 
 function popolateSliderNav(SingleSlider) {
     //  Questa funzione popola il nav dello slider con tanti pallini quante sono le immagini presenti nello slider stesso
@@ -107,4 +133,29 @@ function popolateSliderNav(SingleSlider) {
             })   
         }
     }
+}
+
+function contaSlider(allSliders) {
+    //  Restituisce il numero di slider presenti nella pagina
+    return allSliders.length;
+}
+
+function contaImmagini(SingleSlider) {    
+    //  Passato uno specifico slider come parametro, la funzione conta il numero di immagini al suo interno
+    return $(SingleSlider).find('.images').find('img').length;
+}
+
+function showMenu() {
+    $(document).find('.inner-menu').addClass('shown');
+    hideHamburger();
+}
+function hideMenu() {
+    $(document).find('.inner-menu').removeClass('shown');
+    showHamburger();
+}
+function showHamburger() {
+    $(document).find('.hamburger-icon').addClass('shown');
+}
+function hideHamburger() {
+    $(document).find('.hamburger-icon').removeClass('shown');
 }
